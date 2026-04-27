@@ -3,67 +3,78 @@ import static org.junit.Assert.*;
 
 public class QuantityMeasurementAppTest {
 
-    // -------- FEET TESTS --------
+    // Same-unit equality
 
     @Test
-    public void testFeetEquality_SameValue() {
-        assertTrue("1.0 ft should equal 1.0 ft",
-                QuantityMeasurementApp.areFeetEqual(1.0, 1.0));
+    public void testEquality_FeetToFeet_SameValue() {
+        assertTrue(QuantityMeasurementApp.areEqual(
+                1.0, QuantityMeasurementApp.LengthUnit.FEET,
+                1.0, QuantityMeasurementApp.LengthUnit.FEET));
     }
 
     @Test
-    public void testFeetEquality_DifferentValue() {
-        assertFalse("1.0 ft should not equal 2.0 ft",
-                QuantityMeasurementApp.areFeetEqual(1.0, 2.0));
+    public void testEquality_InchToInch_SameValue() {
+        assertTrue(QuantityMeasurementApp.areEqual(
+                1.0, QuantityMeasurementApp.LengthUnit.INCH,
+                1.0, QuantityMeasurementApp.LengthUnit.INCH));
+    }
+
+    // Cross-unit equality
+
+    @Test
+    public void testEquality_FeetToInch_EquivalentValue() {
+        assertTrue(QuantityMeasurementApp.areEqual(
+                1.0, QuantityMeasurementApp.LengthUnit.FEET,
+                12.0, QuantityMeasurementApp.LengthUnit.INCH));
     }
 
     @Test
-    public void testFeetEquality_NullComparison() {
-        QuantityMeasurementApp.Feet f = new QuantityMeasurementApp.Feet(1.0);
-        assertFalse("Feet should not equal null", f.equals(null));
+    public void testEquality_InchToFeet_EquivalentValue() {
+        assertTrue(QuantityMeasurementApp.areEqual(
+                12.0, QuantityMeasurementApp.LengthUnit.INCH,
+                1.0, QuantityMeasurementApp.LengthUnit.FEET));
+    }
+
+    // Different values
+
+    @Test
+    public void testEquality_FeetToFeet_DifferentValue() {
+        assertFalse(QuantityMeasurementApp.areEqual(
+                1.0, QuantityMeasurementApp.LengthUnit.FEET,
+                2.0, QuantityMeasurementApp.LengthUnit.FEET));
     }
 
     @Test
-    public void testFeetEquality_SameReference() {
-        QuantityMeasurementApp.Feet f = new QuantityMeasurementApp.Feet(1.0);
-        assertTrue("Same reference should be equal", f.equals(f));
+    public void testEquality_InchToInch_DifferentValue() {
+        assertFalse(QuantityMeasurementApp.areEqual(
+                1.0, QuantityMeasurementApp.LengthUnit.INCH,
+                2.0, QuantityMeasurementApp.LengthUnit.INCH));
     }
 
+    // Null handling
+
     @Test
-    public void testFeetEquality_NonNumericInput() {
-        QuantityMeasurementApp.Feet f = new QuantityMeasurementApp.Feet(1.0);
-        assertFalse("Feet should not equal non-numeric type", f.equals("abc"));
+    public void testEquality_NullComparison() {
+        QuantityMeasurementApp.Quantity q =
+                new QuantityMeasurementApp.Quantity(1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET);
+
+        assertFalse(q.equals(null));
     }
 
-    // -------- INCHES TESTS --------
-
-    @Test
-    public void testInchesEquality_SameValue() {
-        assertTrue("1.0 inch should equal 1.0 inch",
-                QuantityMeasurementApp.areInchesEqual(1.0, 1.0));
+    @Test(expected = IllegalArgumentException.class)
+    public void testEquality_NullUnit() {
+        new QuantityMeasurementApp.Quantity(1.0, null);
     }
 
-    @Test
-    public void testInchesEquality_DifferentValue() {
-        assertFalse("1.0 inch should not equal 2.0 inch",
-                QuantityMeasurementApp.areInchesEqual(1.0, 2.0));
-    }
+    // Same reference
 
     @Test
-    public void testInchesEquality_NullComparison() {
-        QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
-        assertFalse("Inches should not equal null", i.equals(null));
-    }
+    public void testEquality_SameReference() {
+        QuantityMeasurementApp.Quantity q =
+                new QuantityMeasurementApp.Quantity(1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET);
 
-    @Test
-    public void testInchesEquality_SameReference() {
-        QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
-        assertTrue("Same reference should be equal", i.equals(i));
-    }
-
-    @Test
-    public void testInchesEquality_NonNumericInput() {
-        QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
-        assertFalse("Inches should not equal non-numeric type", i.equals("xyz"));
+        assertTrue(q.equals(q));
     }
 }
