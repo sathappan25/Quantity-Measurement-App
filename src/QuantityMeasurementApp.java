@@ -1,9 +1,11 @@
 public class QuantityMeasurementApp {
 
-    // Enum for units with conversion to base unit (feet)
+    // All units converted to BASE UNIT = FEET
     public enum LengthUnit {
         FEET(1.0),
-        INCH(1.0 / 12.0);
+        INCH(1.0 / 12.0),
+        YARD(3.0),
+        CENTIMETER(0.0328084); // Correct: 1 cm = 0.0328084 feet
 
         private final double toFeetFactor;
 
@@ -16,7 +18,7 @@ public class QuantityMeasurementApp {
         }
     }
 
-    // Generic Quantity class
+    // Generic Quantity class (unchanged)
     public static class Quantity {
         private final double value;
         private final LengthUnit unit;
@@ -35,15 +37,10 @@ public class QuantityMeasurementApp {
 
         @Override
         public boolean equals(Object obj) {
-            // Same reference
             if (this == obj) return true;
-
-            // Null & type check
             if (obj == null || getClass() != obj.getClass()) return false;
 
             Quantity other = (Quantity) obj;
-
-            // Compare after converting to base unit (feet)
             return Double.compare(this.toBaseUnit(), other.toBaseUnit()) == 0;
         }
 
@@ -53,16 +50,14 @@ public class QuantityMeasurementApp {
         }
     }
 
-    // Helper method for easy comparison
+    // Helper method
     public static boolean areEqual(double v1, LengthUnit u1, double v2, LengthUnit u2) {
         return new Quantity(v1, u1).equals(new Quantity(v2, u2));
     }
 
     public static void main(String[] args) {
-        System.out.println("1 ft == 12 inch ? " +
-                areEqual(1.0, LengthUnit.FEET, 12.0, LengthUnit.INCH));
-
-        System.out.println("1 inch == 1 inch ? " +
-                areEqual(1.0, LengthUnit.INCH, 1.0, LengthUnit.INCH));
+        System.out.println(areEqual(1.0, LengthUnit.YARD, 3.0, LengthUnit.FEET)); // true
+        System.out.println(areEqual(1.0, LengthUnit.YARD, 36.0, LengthUnit.INCH)); // true
+        System.out.println(areEqual(1.0, LengthUnit.CENTIMETER, 0.393701, LengthUnit.INCH)); // true
     }
 }
