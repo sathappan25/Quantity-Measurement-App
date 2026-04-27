@@ -33,6 +33,18 @@ public class QuantityMeasurementApp {
             this.value = value;
             this.unit = unit;
         }
+        public Quantity add(Quantity other, LengthUnit targetUnit) {
+           if (other == null || targetUnit == null)
+                 throw new IllegalArgumentException("Invalid input");
+
+           if (!Double.isFinite(this.value) || !Double.isFinite(other.value))
+                 throw new IllegalArgumentException("Invalid value");
+
+           double sumInFeet = this.toBaseUnit() + other.toBaseUnit();
+           double result = targetUnit.fromFeet(sumInFeet);
+
+           return new Quantity(result, targetUnit);
+    }
 
         public double getValue() {
             return value;

@@ -6,55 +6,56 @@ public class QuantityMeasurementAppTest {
     private static final double EPSILON = 1e-6;
 
     @Test
-    public void testConversion_FeetToInches() {
-        assertEquals(12.0,
-                QuantityMeasurementApp.Quantity.convert(
-                        1.0,
-                        QuantityMeasurementApp.LengthUnit.FEET,
-                        QuantityMeasurementApp.LengthUnit.INCH),
-                EPSILON);
-    }
-
-    @Test
-    public void testAddition_FeetPlusInches() {
-        QuantityMeasurementApp.Quantity q1 =
-                new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET);
-
-        QuantityMeasurementApp.Quantity q2 =
-                new QuantityMeasurementApp.Quantity(12.0, QuantityMeasurementApp.LengthUnit.INCH);
-
-        QuantityMeasurementApp.Quantity result = q1.add(q2);
+    public void testAddition_ExplicitTargetUnit_Feet() {
+        QuantityMeasurementApp.Quantity result =
+                new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET)
+                        .add(new QuantityMeasurementApp.Quantity(12.0, QuantityMeasurementApp.LengthUnit.INCH),
+                                QuantityMeasurementApp.LengthUnit.FEET);
 
         assertEquals(2.0, result.getValue(), EPSILON);
         assertEquals(QuantityMeasurementApp.LengthUnit.FEET, result.getUnit());
     }
 
     @Test
-    public void testAddition_InchPlusFeet() {
-        QuantityMeasurementApp.Quantity q1 =
-                new QuantityMeasurementApp.Quantity(12.0, QuantityMeasurementApp.LengthUnit.INCH);
-
-        QuantityMeasurementApp.Quantity q2 =
-                new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET);
-
-        QuantityMeasurementApp.Quantity result = q1.add(q2);
+    public void testAddition_ExplicitTargetUnit_Inches() {
+        QuantityMeasurementApp.Quantity result =
+                new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET)
+                        .add(new QuantityMeasurementApp.Quantity(12.0, QuantityMeasurementApp.LengthUnit.INCH),
+                                QuantityMeasurementApp.LengthUnit.INCH);
 
         assertEquals(24.0, result.getValue(), EPSILON);
         assertEquals(QuantityMeasurementApp.LengthUnit.INCH, result.getUnit());
     }
 
     @Test
-    public void testAddition_WithZero() {
+    public void testAddition_ExplicitTargetUnit_Yards() {
         QuantityMeasurementApp.Quantity result =
-                new QuantityMeasurementApp.Quantity(5.0, QuantityMeasurementApp.LengthUnit.FEET)
-                        .add(new QuantityMeasurementApp.Quantity(0.0, QuantityMeasurementApp.LengthUnit.INCH));
+                new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET)
+                        .add(new QuantityMeasurementApp.Quantity(12.0, QuantityMeasurementApp.LengthUnit.INCH),
+                                QuantityMeasurementApp.LengthUnit.YARD);
 
-        assertEquals(5.0, result.getValue(), EPSILON);
+        assertEquals(0.666666, result.getValue(), EPSILON);
+        assertEquals(QuantityMeasurementApp.LengthUnit.YARD, result.getUnit());
+    }
+
+    @Test
+    public void testAddition_Commutativity_WithTargetUnit() {
+        QuantityMeasurementApp.Quantity a =
+                new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET);
+
+        QuantityMeasurementApp.Quantity b =
+                new QuantityMeasurementApp.Quantity(12.0, QuantityMeasurementApp.LengthUnit.INCH);
+
+        QuantityMeasurementApp.Quantity r1 = a.add(b, QuantityMeasurementApp.LengthUnit.YARD);
+        QuantityMeasurementApp.Quantity r2 = b.add(a, QuantityMeasurementApp.LengthUnit.YARD);
+
+        assertEquals(r1.getValue(), r2.getValue(), EPSILON);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddition_NullOperand() {
+    public void testAddition_NullTargetUnit() {
         new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.FEET)
-                .add(null);
+                .add(new QuantityMeasurementApp.Quantity(1.0, QuantityMeasurementApp.LengthUnit.INCH),
+                        null);
     }
 }
