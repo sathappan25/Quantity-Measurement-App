@@ -1,12 +1,13 @@
-public enum WeightUnit implements IMeasurable {
+public enum LengthUnit implements IMeasurable {
 
-    KILOGRAM(1.0),
-    GRAM(0.001),
-    POUND(0.453592);
+    FEET(0.3048),
+    INCHES(0.0254),
+    YARD(0.9144),
+    CENTIMETER(0.01);
 
     private final double factor;
 
-    WeightUnit(double factor) {
+    LengthUnit(double factor) {
         this.factor = factor;
     }
 
