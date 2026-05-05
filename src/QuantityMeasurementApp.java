@@ -1,21 +1,23 @@
 public class QuantityMeasurementApp {
 
-    public static <U extends IMeasurable> Quantity<U> create(double value, U unit) {
-        return new Quantity<>(value, unit);
-    }
+    public static void main(String[] args) {
 
-    public static <U extends IMeasurable> Quantity<U> add(
-            Quantity<U> a,
-            Quantity<U> b,
-            U targetUnit
-    ) {
-        return a.add(b, targetUnit);
-    }
+        Quantity<VolumeUnit> v1 = new Quantity<>(5.0, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> v2 = new Quantity<>(500.0, VolumeUnit.MILLILITRE);
 
-    public static <U extends IMeasurable> Quantity<U> convert(
-            Quantity<U> q,
-            U target
-    ) {
-        return q.convertTo(target);
+        // Equality
+        System.out.println("Equality: " + v1.equals(v2));
+
+        // Conversion
+        System.out.println("Convert: " + v1.convertTo(VolumeUnit.MILLILITRE));
+
+        // Addition
+        System.out.println("Add: " + v1.add(v2));
+
+        // UC12: Subtraction
+        System.out.println("Subtract: " + v1.subtract(v2));
+
+        // UC12: Division
+        System.out.println("Divide: " + v1.divide(v2));
     }
 }
