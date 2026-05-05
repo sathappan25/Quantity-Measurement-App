@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 
 public class QuantityArithmeticTest {
 
-    // -------- SUBTRACTION --------
+    // ---------------- SUBTRACTION ----------------
 
     @Test
     public void testSubtractionSameUnit() {
@@ -30,7 +30,8 @@ public class QuantityArithmeticTest {
         Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
         Quantity<LengthUnit> q2 = new Quantity<>(6.0, LengthUnit.INCHES);
 
-        Quantity<LengthUnit> result = q1.subtract(q2, LengthUnit.INCHES);
+        Quantity<LengthUnit> result =
+                q1.subtract(q2, LengthUnit.INCHES);
 
         assertEquals(114.0, result.getValue(), 0.01);
     }
@@ -56,16 +57,18 @@ public class QuantityArithmeticTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void testSubtractionCrossCategory() {
-    Quantity<LengthUnit> l = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> l =
+                new Quantity<>(10.0, LengthUnit.FEET);
 
-    // simulate invalid category via raw type but safely
-    Quantity<?> w = new Quantity<>(5.0, WeightUnit.KILOGRAM);
+        Quantity w =
+                new Quantity<>(5.0, WeightUnit.KILOGRAM);
 
-    l.subtract((Quantity<LengthUnit>) w);
-}
+        l.subtract(w);
+    }
 
-    // -------- DIVISION --------
+    // ---------------- DIVISION ----------------
 
     @Test
     public void testDivisionSameUnit() {
@@ -108,11 +111,14 @@ public class QuantityArithmeticTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void testDivisionCrossCategory() {
-    Quantity<LengthUnit> l = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> l =
+                new Quantity<>(10.0, LengthUnit.FEET);
 
-    Quantity<?> w = new Quantity<>(5.0, WeightUnit.KILOGRAM);
+        Quantity w =
+                new Quantity<>(5.0, WeightUnit.KILOGRAM);
 
-    l.divide((Quantity<LengthUnit>) w);
-}
+        l.divide(w);
+    }
 }

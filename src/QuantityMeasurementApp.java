@@ -2,22 +2,19 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        Quantity<VolumeUnit> v1 = new Quantity<>(5.0, VolumeUnit.LITRE);
-        Quantity<VolumeUnit> v2 = new Quantity<>(500.0, VolumeUnit.MILLILITRE);
+        Quantity<LengthUnit> q1 =
+                new Quantity<>(10.0, LengthUnit.FEET);
 
-        // Equality
-        System.out.println("Equality: " + v1.equals(v2));
+        Quantity<LengthUnit> q2 =
+                new Quantity<>(6.0, LengthUnit.INCHES);
 
-        // Conversion
-        System.out.println("Convert: " + v1.convertTo(VolumeUnit.MILLILITRE));
+        System.out.println("Subtract FEET: " +
+                q1.subtract(q2).getValue());
 
-        // Addition
-        System.out.println("Add: " + v1.add(v2));
+        System.out.println("Subtract INCHES: " +
+                q1.subtract(q2, LengthUnit.INCHES).getValue());
 
-        // UC12: Subtraction
-        System.out.println("Subtract: " + v1.subtract(v2));
-
-        // UC12: Division
-        System.out.println("Divide: " + v1.divide(v2));
+        System.out.println("Divide: " +
+                q1.divide(q2));
     }
 }
