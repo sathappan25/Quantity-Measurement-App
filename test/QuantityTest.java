@@ -69,4 +69,4 @@ public class QuantityTest {
     public void testInvalidValue() {
         new Quantity<>(Double.NaN, LengthUnit.FEET);
     }
-}
+} 
